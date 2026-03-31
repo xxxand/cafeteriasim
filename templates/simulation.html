@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}仿真界面 - 食堂就餐仿真平台{% endblock %}
+{% block content %}
+<section class="card">
+    <div class="section-head">
+        <h2>仿真界面</h2>
+        <p>控制播放状态并观察系统动态。</p>
+    </div>
+    <div class="toolbar">
+        <button id="start-btn" class="primary">开始</button>
+        <button id="pause-btn" class="secondary">暂停</button>
+        <button id="resume-btn" class="secondary">继续</button>
+        <button id="reset-btn" class="secondary">重置</button>
+        <button id="end-btn" class="danger">结束</button>
+    </div>
+    <div class="stats-grid" id="stats-grid"></div>
+    <div class="simulation-layout">
+        <div class="subcard">
+            <h3>窗口排队</h3>
+            <div id="window-list" class="window-list"></div>
+        </div>
+        <div class="subcard">
+            <h3>餐桌状态</h3>
+            <div id="table-grid" class="table-grid"></div>
+        </div>
+    </div>
+    <div class="chart-wrap">
+        <canvas id="timeline-chart"></canvas>
+    </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>window.SIMULATION_ID = "{{ simulation_id }}";</script>
+<script src="{{ url_for('static', filename='js/simulation.js') }}"></script>
+{% endblock %}

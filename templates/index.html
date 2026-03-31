@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}启动界面 - 食堂就餐仿真平台{% endblock %}
+{% block content %}
+<section class="card">
+    <div class="section-head">
+        <h2>启动界面</h2>
+        <p>填写系统参数后开始仿真。</p>
+    </div>
+    <form id="config-form" class="grid-form">
+        <label>窗口数量<input type="number" name="window_count" min="1" value="4"></label>
+        <label>餐桌数量<input type="number" name="table_count" min="1" value="30"></label>
+        <label>仿真时长(分钟)<input type="number" name="duration_minutes" min="10" value="120"></label>
+        <label>学生到达速率(人/分钟)<input type="number" name="arrival_rate" min="0.1" step="0.1" value="1.6"></label>
+        <label>服务最短时长<input type="number" name="service_min" min="1" value="2"></label>
+        <label>服务最长时长<input type="number" name="service_max" min="1" value="5"></label>
+        <label>就餐最短时长<input type="number" name="dining_min" min="1" value="10"></label>
+        <label>就餐最长时长<input type="number" name="dining_max" min="1" value="20"></label>
+        <label>快照间隔(分钟)<input type="number" name="snapshot_interval" min="1" value="1"></label>
+        <label>随机种子<input type="number" name="random_seed" value="42"></label>
+        <div class="form-actions">
+            <button type="submit" class="primary">开始仿真</button>
+            <button type="button" class="secondary" onclick="window.close()">退出系统</button>
+        </div>
+    </form>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}
