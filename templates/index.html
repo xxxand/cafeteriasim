@@ -1,4 +1,5 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
+<!-- 启动页：负责输入仿真参数并创建一次新的仿真。 -->
 {% block title %}启动界面 - 食堂就餐仿真平台{% endblock %}
 {% block content %}
 <section class="card">
@@ -7,6 +8,7 @@
         <p>填写系统参数后开始仿真。</p>
     </div>
     <form id="config-form" class="grid-form">
+        <!-- 每个输入框的 name 都与后端配置字段名一一对应 -->
         <label>窗口数量<input type="number" name="window_count" min="1" value="4"></label>
         <label>餐桌数量<input type="number" name="table_count" min="1" value="30"></label>
         <label>仿真时长(分钟)<input type="number" name="duration_minutes" min="10" value="120"></label>

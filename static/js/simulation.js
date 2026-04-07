@@ -1,9 +1,12 @@
+﻿// 仿真页脚本：
+// 负责按时间顺序播放后端返回的 timeline 数据，并动态刷新统计卡片、窗口列表、餐桌网格和折线图。
 let simulationData = null;
 let currentIndex = 0;
 let timer = null;
 let chart = null;
 
 function renderStats(point) {
+  // 将当前时间点的关键指标整理成卡片列表。
   const stats = [
     ["当前时间", `${point.time} 分钟`],
     ["系统总人数", point.system_total],
@@ -20,12 +23,14 @@ function renderStats(point) {
 }
 
 function renderWindows(point) {
+  // 渲染每个窗口当前的排队长度。
   document.getElementById("window-list").innerHTML = point.window_queues
     .map((item) => `<div class="window-item">窗口 ${item.window_id}<br>排队人数: <strong>${item.queue_length}</strong></div>`)
     .join("");
 }
 
 function renderTables(point) {
+  // 渲染餐桌占用网格，busy 类会触发不同颜色。
   document.getElementById("table-grid").innerHTML = point.tables
     .map((table) => `
       <div class="table-seat ${table.occupied ? "busy" : ""}">
@@ -36,6 +41,7 @@ function renderTables(point) {
 }
 
 function buildChart() {
+  // 创建折线图实例，播放过程中会持续往图中追加新数据点。
   const ctx = document.getElementById("timeline-chart");
   chart = new Chart(ctx, {
     type: "line",
@@ -57,6 +63,7 @@ function buildChart() {
 }
 
 function step() {
+  // 每执行一次，就向前播放一个时间点。
   if (!simulationData || currentIndex >= simulationData.timeline.length) {
     clearInterval(timer);
     timer = null;
@@ -78,21 +85,26 @@ function step() {
 }
 
 function startPlayback() {
+  // 防止重复点击开始后创建多个计时器。
   if (!timer) {
     timer = setInterval(step, 400);
   }
 }
 
 async function init() {
+  // 读取当前仿真编号对应的完整数据。
   const response = await fetch(`/api/simulations/${window.SIMULATION_ID}`);
   simulationData = await response.json();
   buildChart();
+
   if (simulationData.timeline?.length) {
+    // 初始化时先展示第一个时间点，等待用户开始播放。
     renderStats(simulationData.timeline[0]);
     renderWindows(simulationData.timeline[0]);
     renderTables(simulationData.timeline[0]);
   }
 
+  // 绑定播放器控制按钮。
   document.getElementById("start-btn").addEventListener("click", startPlayback);
   document.getElementById("pause-btn").addEventListener("click", () => {
     clearInterval(timer);
@@ -100,6 +112,7 @@ async function init() {
   });
   document.getElementById("resume-btn").addEventListener("click", startPlayback);
   document.getElementById("reset-btn").addEventListener("click", () => {
+    // 重置时需要停止计时器、清空图表并回到初始时间点。
     clearInterval(timer);
     timer = null;
     currentIndex = 0;
@@ -112,8 +125,10 @@ async function init() {
     }
   });
   document.getElementById("end-btn").addEventListener("click", () => {
+    // 结束播放后跳转到结果页。
     window.location.href = `/results/${window.SIMULATION_ID}`;
   });
 }
 
+// 页面加载后立即执行初始化。
 init();

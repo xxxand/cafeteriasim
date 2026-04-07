@@ -1,4 +1,7 @@
+﻿// 结果页脚本：
+// 负责渲染统计摘要、结果图表和部分学生明细。
 function renderSummary(summary) {
+  // 将后端字段名映射为中文显示名称。
   const labels = {
     total_students: "学生总数",
     completed_students: "完成人数",
@@ -12,6 +15,7 @@ function renderSummary(summary) {
 
   document.getElementById("summary-grid").innerHTML = Object.entries(labels)
     .map(([key, label]) => {
+      // 时间类指标追加“分钟”，利用率追加百分号。
       const suffix = key.includes("time") ? " 分钟" : key === "table_utilization" ? "%" : "";
       return `<div class="stat-card"><span>${label}</span><strong>${summary[key]}${suffix}</strong></div>`;
     })
@@ -19,8 +23,10 @@ function renderSummary(summary) {
 }
 
 function buildCharts(timeline) {
+  // 所有图表共用时间线作为横轴。
   const labels = timeline.map((item) => item.time);
 
+  // 折线图展示系统人数、排队人数和空闲桌数的变化趋势。
   new Chart(document.getElementById("result-chart"), {
     type: "line",
     data: {
@@ -34,6 +40,7 @@ function buildCharts(timeline) {
     options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } },
   });
 
+  // 柱状图读取最后一个时间点的窗口队列情况，便于横向比较各窗口压力。
   const latest = timeline[timeline.length - 1];
   new Chart(document.getElementById("window-chart"), {
     type: "bar",
@@ -52,6 +59,7 @@ function buildCharts(timeline) {
 }
 
 function renderStudents(students) {
+  // 仅展示前 20 条学生记录，避免结果页表格过长。
   document.querySelector("#student-table tbody").innerHTML = students
     .slice(0, 20)
     .map((student) => `
@@ -67,6 +75,7 @@ function renderStudents(students) {
 }
 
 async function init() {
+  // 根据页面注入的 simulation_id 从后端读取结果。
   const response = await fetch(`/api/simulations/${window.SIMULATION_ID}`);
   const data = await response.json();
   renderSummary(data.summary);
@@ -74,4 +83,5 @@ async function init() {
   renderStudents(data.students);
 }
 
+// 页面加载完成后立即初始化。
 init();

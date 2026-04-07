@@ -1,3 +1,5 @@
+﻿# 项目依赖列表：
+# Flask 提供 Web 服务，SimPy 负责离散事件仿真，numpy/pandas 便于统计分析扩展。
 Flask==3.0.3
 numpy==2.1.1
 pandas==2.2.3
