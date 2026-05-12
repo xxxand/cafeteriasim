@@ -27,7 +27,6 @@ D:\simulate
 - `app.py`：Flask 应用入口文件，负责页面路由和接口路由。
 - `requirements.txt`：项目依赖列表。
 - `README.md`：项目说明、测试说明和运行方式。
-- `.gitignore`：Git 忽略文件配置。
 - `cafeteria_sim/`：后端仿真核心代码目录。
 - `templates/`：前端页面模板目录。
 - `static/`：前端静态资源目录，包括样式和脚本。
